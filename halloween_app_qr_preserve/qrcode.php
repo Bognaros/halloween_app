@@ -1,27 +1,46 @@
 <?php
-require_once __DIR__ . '/inc/qrlib.php';
-$scheme = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
-$base = rtrim(dirname($_SERVER['SCRIPT_NAME']), '/\\');
-$host = $_SERVER['HTTP_HOST'];
-$url = $scheme . '://' . $host . $base . '/index.php';
-
-header('Content-Type: text/html; charset=utf-8');
+$qrFile = __DIR__ . '/assets/images/qr.png';
+if (!file_exists($qrFile)) die('QR code image not found.');
 ?>
-<!doctype html><html><head><meta charset="utf-8"><title>QR Join</title>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"></head>
-<body style="padding:20px"><div class="container">
-  <h1>Scan to join</h1>
-  <p>Open this URL on your phone to register:</p>
-  <p><code><?php echo htmlspecialchars($url); ?></code></p>
-  <div class="text-center border p-3">
-  <?php
-    ob_start();
-    QRcode::png($url, false, QR_ECLEVEL_L, 6);
-    $imageData = ob_get_contents();
-    ob_end_clean();
-    echo '<img src="data:image/png;base64,' . base64_encode($imageData) . '" alt="QR">';
-  ?>
-  </div>
-  <p class="mt-3">Or share the link above.</p>
-  <p><a href="index.php">Back</a></p>
-</div></body></html>
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Halloweeni jelmezverseny — — QR</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="assets/css/custom.css">
+<style>
+/* Container like index.php with top padding */
+.container.qr-container {
+    padding-top: 20px;
+}
+
+/* Center QR code horizontally */
+img.qr {
+    display: block;
+    margin: 60px auto 40px; /* centers and adds spacing above/below */
+    width: 500px;
+    max-width: 90%;
+    height: auto;
+    border: 5px solid #ff9900;
+    border-radius: 10px;
+}
+
+/* Back link left-aligned */
+.back-link {
+    text-align: left;
+    margin-top: 10px;
+}
+
+</style>
+</head>
+<body>
+<div class="container qr-container mt-3">
+    <h1>Scanneld be a kódot a csatlakozáshoz — QR</h1>
+    <img src="assets/images/qr.png" alt="QR Code" class="qr">
+    <p class="back-link"><a href="index.php">Vissza</a></p>
+    <img src="assets/images/pumpkin.png" class="pumpkin" alt="pumpkin">
+</div>
+</body>
+
+</html>
