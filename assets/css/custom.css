@@ -1,27 +1,50 @@
 /* === Base colors === */
 body {
+    position: relative;
     background-color: #1a1a1a; /* dark background */
     color: #ff8c00;            /* orange text */
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 1.1rem;         /* slightly bigger for readability */
+    line-height: 1.4;
+    overflow-x: hidden;
+}
+
+/* Spiderweb background that moves with the page */
+body::before {
+  content: "";
+  position: fixed;          /* <-- changed from fixed */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url("../images/spiderweb.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 0.3;               /* adjust transparency as needed */
+  z-index: -1;                 /* ensures it's behind everything */
+  pointer-events: none;
 }
 
 /* === Headings === */
 h1, h2, h3, h4, h5, h6 {
     color: #ff9900;
+    margin-bottom: 0.5rem;
 }
+
 
 /* === Container / Panels === */
 .container {
-    background-color: #2a2a2a;
+    background-color: #363636;
     padding: 20px;
     border-radius: 10px;
-    /*box-shadow: 0 0 15px rgba(255,140,0,0.3);*/
 }
 
 /* === Buttons === */
 .btn-primary {
     background-color: #ff6600;
     border-color: #ff6600;
+    font-size: 1.1rem;
 }
 .btn-primary:hover {
     background-color: #ff8000;
@@ -59,46 +82,112 @@ h1, h2, h3, h4, h5, h6 {
 /* === Alerts === */
 .alert-success {
     background-color: #51ff00bd;
-    color: #000000;
+    color: #000;
     border-color: #660000;
 }
 
 .alert-danger {
     background-color: #ff0000c9;
-    color: #000000;
-    border-color: #660000;
-}
-.alert-warning {
-    background-color: #ffc400;
-    color: #000000;
+    color: #000;
     border-color: #660000;
 }
 
-/* === Tables / Results === */
-table {
-    background-color: #2a2a2a;
-    color: #ff8c00;
-}
-table th, table td {
-    border-color: #ff6600 !important;
+.alert-warning {
+    background-color: #ffc400;
+    color: #000;
+    border-color: #660000;
 }
 
 /* === Inputs / Forms === */
-.form-control, .form-select {
-    background-color: #1f1f1f;
+.form-control, .form-select, input[type="number"] {
+    background-color: #1a1a1a;
     color: #ff9900;
-    border: 1px solid #ff6600;
-}
-.form-control:focus, .form-select:focus {
-    border-color: #ff9900;
-    box-shadow: 0 0 5px #ff9900;
+    border: 1px solid #222;
+    border-radius: 10px;
+    padding: 0.75rem 0.9rem;   /* taller input fields */
+    font-size: 1.1rem;
 }
 
-/* === QR placeholder / Images === */
-img.qr-placeholder {
-    border: 2px dashed #ff9900;
-    padding: 5px;
-    border-radius: 5px;
+.form-control:focus, .form-select:focus, input[type="number"]:focus {
+    background-color: #1f1f1f;
+    color: #ff9900;
+    outline: none;
+}
+
+/* Remove number input spinners */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* File input button styling */
+input[type="file"]::file-selector-button {
+    background-color: #272727;
+    color: #ff9900;
+    border: 1px solid #222;
+    border-radius: 10px;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+}
+input[type="file"]::file-selector-button:hover {
+    background-color: #e08701;
+}
+
+/* === Cards / Results === */
+.card {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    background-color: #2a2a2a;
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 15px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.card img.photo {
+    width: 100%;
+    height: auto;  /* allow image height to adjust */
+    max-height: 250px;
+    object-fit: cover;
+    border-radius: 10px;
+    display: block;
+    margin-bottom: 10px;
+}
+
+.card h5, .card h4, .card p{
+    margin-bottom: 0.4rem;
+    color: #ff8c00;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-wrap: break-word;
+    font-size: 1.1rem;
+}
+
+form label {
+    color: #ff8c00;
+}
+
+/* === Layout helpers === */
+.d-flex.flex-column {
+    flex-direction: column !important;
+}
+
+.gap-3 {
+    gap: 1rem !important;
+}
+
+/* === QR Code === */
+img.qr {
+    display: block;
+    margin: 40px auto;
+    width: 500px;
+    max-width: 90%;
+    height: auto;
+    border: 5px solid #ff9900;
+    border-radius: 10px;
 }
 
 /* === Pumpkin Accent === */
@@ -109,6 +198,7 @@ img.qr-placeholder {
     width: 50px;
     height: auto;
     z-index: 1000;
+    cursor: pointer;
 }
 
 /* === Links === */
@@ -119,103 +209,83 @@ a:hover {
     color: #ffcc00;
 }
 
-/* === Misc === */
+/* === Horizontal Rule === */
 hr {
     border-top: 1px solid #ff6600;
 }
 
-/* Light grey input fields */
-input.form-control,
-textarea.form-control,
-select.form-select {
-    background-color: #1f1f1f;; /* light grey */
-    color: #ff9900;               /* text color */
+/* === Responsive adjustments === */
+@media (max-width: 768px) {
+    body {
+        font-size: 1.2rem;
+    }
+    .form-control, .form-select, input[type="number"] {
+        font-size: 1.2rem;
+        padding: 0.85rem 1rem;
+    }
+    .card {
+        padding: 15px;
+    }
+    .card img.photo {
+        max-height: 300px;
+    }
+    .btn {
+        font-size: 1.2rem;
+        padding: 0.7rem 1.2rem;
+    }
 }
 
-input.form-control:focus,
-textarea.form-control:focus,
-select.form-select:focus {
-    background-color: #1f1f1f;; /* slightly darker grey on focus */
-    color: #ff9900;
-}
-/* Light grey panels / result cards */
-.card, .results-table, .table {
-    background-color: #1f1f1f !important; /* light grey */
-    color: #ff9900 !important;               /* black text */
+/* === Results Page Enhancements === */
+
+/* Base card look */
+.result-card {
+  background-color: #2a2a2a;
+  border-radius: 15px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+  margin-bottom: 15px;
+  border: 2px solid #444;
 }
 
-/* Style all number inputs */
-input[type="number"] {
-    background-color: #272727; 
-    color: #ff9900;               /* text color */
-    border: 1px solid #222;    /* optional border */
-    border-radius: 5px;
-    padding: 0.375rem 0.75rem; /* match Bootstrap input padding */
+/* Gold, silver, bronze highlights */
+.result-card.gold {
+  border-color: gold;
+  background: linear-gradient(180deg, #3a2f00, #2a2a2a);
+}
+.result-card.silver {
+  border-color: silver;
+  background: linear-gradient(180deg, #3a3a3a, #2a2a2a);
+}
+.result-card.bronze {
+  border-color: #cd7f32;
+  background: linear-gradient(180deg, #3a1f00, #2a2a2a);
 }
 
-/* On focus */
-input[type="number"]:focus {
-    background-color: #444444; /* slightly darker grey */
-    color: #ff9900;
-    outline: none;             /* remove default outline */
-    box-shadow: none;          /* remove default focus shadow */
+/* Rank badge */
+.rank-badge {
+  background-color: #ff8c00;
+  color: black;
+  font-weight: bold;
+  font-size: 1rem;
+  border-radius: 10px;
+  padding: 5px 10px;
+  display: inline-block;
+  margin-top: 10px;
 }
 
-/* Optional: hide number input spinners for consistent look (Chrome, Edge, Safari) */
-input[type="number"]::-webkit-inner-spin-button,
-input[type="number"]::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
+/* Photo consistency */
+.result-card img.photo {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 10px;
+  margin-bottom: 10px;
 }
 
-/* All text and number inputs */
-input.form-control,
-textarea.form-control,
-select.form-select {
-    background-color: #1f1f1f; /* light grey */
-    color: #ff9900;
-}
-
-/* Focus state */
-input.form-control:focus,
-textarea.form-control:focus,
-select.form-select:focus {
-    background-color: #1f1f1f; /* slightly darker grey */
-    color: #ff9900;
-}
-
-/* Chrome, Edge, Opera */
-input.form-control:-webkit-autofill,
-input.form-control:-webkit-autofill:focus,
-input.form-control:-webkit-autofill:hover {
-    background-color: #1f1f1f !important;
-    color: #ff9900 !important;
-}
-
-/* Firefox */
-input.form-control:-moz-autofill {
-    background-color: #1f1f1f !important;
-    color: #ff9900 !important;
-}
-
-/* Chrome / Edge autofill */
-input.form-control:-webkit-autofill,
-input.form-control:-webkit-autofill:focus {
-    -webkit-box-shadow: 0 0 0px 1000px #1f1f1f inset !important;
-    -webkit-text-fill-color: #ff9900 !important;
-}
-
-/* Style the file input button */
-input[type="file"]::file-selector-button {
-    background-color: #272727;   /* light grey to match inputs */
-    color: #ff9900;                 /* text color */
-    border: 1px solid #222;
-    border-radius: 5px;
-    padding: 5px 10px;
-    cursor: pointer;
-}
-
-/* On hover */
-input[type="file"]::file-selector-button:hover {
-    background-color: #e08701;   /* slightly darker grey */
+/* Text readability */
+.result-card h4,
+.result-card p {
+  color: #ff8c00;
+  margin-bottom: 0.4rem;
+  text-shadow: 0 1px 2px black;
 }

@@ -42,36 +42,7 @@ $participants = $pdo->query('SELECT * FROM participants ORDER BY id')->fetchAll(
 <title>Halloweeni jelmezverseny — Szavazás</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
 <link rel="stylesheet" href="assets/css/custom.css">
-<style>body{padding:20px}
-.card {
-  height: 250px;                  /* a bit taller for breathing room */
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  background-color: #2a2a2a;      /* matches your site background */
-  border-radius: 10px;
-  padding: 10px;
-}
 
-/* Image container consistency */
-.card img.photo {
-  width: 100%;                    /* don’t stretch beyond container */
-  height: 180px;                  /* fixed visible height */
-  object-fit: cover;              /* crop top/bottom neatly */
-  border-radius: 10px;
-  display: block;
-}
-
-/* Keep text tidy and aligned */
-.card h5,
-.card h4,
-.card p {
-  margin-bottom: 0.4rem;
-  color: #ff8c00;                 /* match your orange accent */
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-</style>
 </head>
 <body>
 <div class="container">
@@ -87,37 +58,39 @@ $participants = $pdo->query('SELECT * FROM participants ORDER BY id')->fetchAll(
     <div class="alert alert-success">Köszi a szavazatot!</div>
   <?php endif; ?>
 
-  <?php if ($participants): ?>
-    <form method="post">
-      <div class="row gy-3">
+<?php if ($participants): ?>
+<form method="post">
+    <div class="d-flex flex-column gap-3">
         <?php foreach ($participants as $p): ?>
-          <div class="col-12 col-md-6">
-            <div class="card p-2">
-              <div class="d-flex gap-3">
-                <?php if ($p['photo']): ?>
-                  <img src="<?php echo h($p['photo']); ?>" class="photo img-thumbnail" alt="photo">
-                <?php endif; ?>
-                <div>
-                  <h5><?php echo h($p['name']); ?> — <?php echo h($p['costume']); ?></h5>
-                  <label>Érték (1-10): <input type="number" min="1" max="10" name="score[<?php echo $p['id']; ?>]" value="5" required></label>
-                </div>
-              </div>
+        <div class="card p-3">
+            <?php if ($p['photo']): ?>
+            <img src="<?php echo h($p['photo']); ?>" class="photo img-thumbnail mb-2" alt="photo">
+            <?php endif; ?>
+            <h5><?php echo h($p['name']); ?> — <?php echo h($p['costume']); ?></h5>
+            <div class="mt-2">
+                <label>Érték (1-10):</label>
+                <input type="number" min="1" max="10" name="score[<?php echo $p['id']; ?>]" value="5" class="form-control form-control-lg" required>
             </div>
-          </div>
+        </div>
         <?php endforeach; ?>
-      </div>
-      <div class="mt-3">
-        <?php if ($phase === 'voting' && !$ok): ?><button class="btn btn-primary">Szavazat leadása</button><?php endif; ?>
-      </div>
-    </form>
-  <?php else: ?>
-    <div class="alert alert-info">Még nincsenek résztvevők.</div>
-  <?php endif; ?>
+    </div>
+    <div class="mt-3">
+        <?php if ($phase === 'voting' && !$ok): ?>
+        <button class="btn btn-primary btn-lg">Szavazat leadása</button>
+        <?php endif; ?>
+    </div>
+</form>
+<?php else: ?>
+<div class="alert alert-info">Még nincsenek résztvevők.</div>
+<?php endif; ?>
+
 
   <hr>
   <!-- <p><a href="index.php">Back to register</a></p>
   <p><a href="results.php">View results</a></p> -->
-<img src="assets/images/pumpkin.png" class="pumpkin" alt="pumpkin">
+<a href="index.php">
+  <img src="assets/images/pumpkin.png" class="pumpkin" alt="pumpkin">
+</a>
 </div>
 </body>
 

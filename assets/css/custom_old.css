@@ -1,0 +1,221 @@
+/* === Base colors === */
+body {
+    background-color: #1a1a1a; /* dark background */
+    color: #ff8c00;            /* orange text */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* === Headings === */
+h1, h2, h3, h4, h5, h6 {
+    color: #ff9900;
+}
+
+/* === Container / Panels === */
+.container {
+    background-color: #2a2a2a;
+    padding: 20px;
+    border-radius: 10px;
+    /*box-shadow: 0 0 15px rgba(255,140,0,0.3);*/
+}
+
+/* === Buttons === */
+.btn-primary {
+    background-color: #ff6600;
+    border-color: #ff6600;
+}
+.btn-primary:hover {
+    background-color: #ff8000;
+    border-color: #ff8000;
+}
+
+.btn-success {
+    background-color: #ff9900;
+    border-color: #ff9900;
+    color: #1a1a1a;
+}
+.btn-success:hover {
+    background-color: #ffb347;
+    border-color: #ffb347;
+}
+
+.btn-danger {
+    background-color: #cc3300;
+    border-color: #cc3300;
+}
+.btn-danger:hover {
+    background-color: #e64c1e;
+    border-color: #e64c1e;
+}
+
+.btn-warning {
+    background-color: #ffb84d;
+    border-color: #ffb84d;
+}
+.btn-warning:hover {
+    background-color: #ffc966;
+    border-color: #ffc966;
+}
+
+/* === Alerts === */
+.alert-success {
+    background-color: #51ff00bd;
+    color: #000000;
+    border-color: #660000;
+}
+
+.alert-danger {
+    background-color: #ff0000c9;
+    color: #000000;
+    border-color: #660000;
+}
+.alert-warning {
+    background-color: #ffc400;
+    color: #000000;
+    border-color: #660000;
+}
+
+/* === Tables / Results === */
+table {
+    background-color: #2a2a2a;
+    color: #ff8c00;
+}
+table th, table td {
+    border-color: #ff6600 !important;
+}
+
+/* === Inputs / Forms === */
+.form-control, .form-select {
+    background-color: #1f1f1f;
+    color: #ff9900;
+    border: 1px solid #ff6600;
+}
+.form-control:focus, .form-select:focus {
+    border-color: #ff9900;
+    box-shadow: 0 0 5px #ff9900;
+}
+
+/* === QR placeholder / Images === */
+img.qr-placeholder {
+    border: 2px dashed #ff9900;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+/* === Pumpkin Accent === */
+.pumpkin {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 50px;
+    height: auto;
+    z-index: 1000;
+}
+
+/* === Links === */
+a {
+    color: #ff9900;
+}
+a:hover {
+    color: #ffcc00;
+}
+
+/* === Misc === */
+hr {
+    border-top: 1px solid #ff6600;
+}
+
+/* Light grey input fields */
+input.form-control,
+textarea.form-control,
+select.form-select {
+    background-color: #1f1f1f;; /* light grey */
+    color: #ff9900;               /* text color */
+}
+
+input.form-control:focus,
+textarea.form-control:focus,
+select.form-select:focus {
+    background-color: #1f1f1f;; /* slightly darker grey on focus */
+    color: #ff9900;
+}
+/* Light grey panels / result cards */
+.card, .results-table, .table {
+    background-color: #1f1f1f !important; /* light grey */
+    color: #ff9900 !important;               /* black text */
+}
+
+/* Style all number inputs */
+input[type="number"] {
+    background-color: #272727; 
+    color: #ff9900;               /* text color */
+    border: 1px solid #222;    /* optional border */
+    border-radius: 5px;
+    padding: 0.375rem 0.75rem; /* match Bootstrap input padding */
+}
+
+/* On focus */
+input[type="number"]:focus {
+    background-color: #444444; /* slightly darker grey */
+    color: #ff9900;
+    outline: none;             /* remove default outline */
+    box-shadow: none;          /* remove default focus shadow */
+}
+
+/* Optional: hide number input spinners for consistent look (Chrome, Edge, Safari) */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* All text and number inputs */
+input.form-control,
+textarea.form-control,
+select.form-select {
+    background-color: #1f1f1f; /* light grey */
+    color: #ff9900;
+}
+
+/* Focus state */
+input.form-control:focus,
+textarea.form-control:focus,
+select.form-select:focus {
+    background-color: #1f1f1f; /* slightly darker grey */
+    color: #ff9900;
+}
+
+/* Chrome, Edge, Opera */
+input.form-control:-webkit-autofill,
+input.form-control:-webkit-autofill:focus,
+input.form-control:-webkit-autofill:hover {
+    background-color: #1f1f1f !important;
+    color: #ff9900 !important;
+}
+
+/* Firefox */
+input.form-control:-moz-autofill {
+    background-color: #1f1f1f !important;
+    color: #ff9900 !important;
+}
+
+/* Chrome / Edge autofill */
+input.form-control:-webkit-autofill,
+input.form-control:-webkit-autofill:focus {
+    -webkit-box-shadow: 0 0 0px 1000px #1f1f1f inset !important;
+    -webkit-text-fill-color: #ff9900 !important;
+}
+
+/* Style the file input button */
+input[type="file"]::file-selector-button {
+    background-color: #272727;   /* light grey to match inputs */
+    color: #ff9900;                 /* text color */
+    border: 1px solid #222;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+/* On hover */
+input[type="file"]::file-selector-button:hover {
+    background-color: #e08701;   /* slightly darker grey */
+}

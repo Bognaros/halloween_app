@@ -3,8 +3,17 @@ require 'inc/db.php';
 require 'inc/functions.php';
 session_start();
 $is_admin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'] === true;
-// compute averages and order
-$rows = $pdo->query('SELECT p.*, (SELECT AVG(score) FROM votes v WHERE v.participant_id = p.id) as avg_score, (SELECT COUNT(*) FROM votes v WHERE v.participant_id = p.id) as votes_count FROM participants p ORDER BY avg_score DESC NULLS LAST')->fetchAll();
+// compute sum and order
+$rows = $pdo->query('
+  SELECT 
+    p.*, 
+    (SELECT SUM(score) FROM votes v WHERE v.participant_id = p.id) AS total_score,
+    (SELECT AVG(score) FROM votes v WHERE v.participant_id = p.id) AS avg_score,
+    (SELECT COUNT(*) FROM votes v WHERE v.participant_id = p.id) AS votes_count
+  FROM participants p
+  ORDER BY total_score DESC NULLS LAST, avg_score DESC
+')->fetchAll();
+
 ?>
 <!doctype html>
 <html>
@@ -13,37 +22,7 @@ $rows = $pdo->query('SELECT p.*, (SELECT AVG(score) FROM votes v WHERE v.partici
 <title>Halloweeni jelmezverseny — Eredményhirdetés</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
 <link rel="stylesheet" href="assets/css/custom.css">
-<style>body{padding:20px}
-.card {
-  height: 400px;                  /* a bit taller for breathing room */
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  background-color: #2a2a2a;      /* matches your site background */
-  border-radius: 10px;
-  padding: 10px;
-}
 
-/* Image container consistency */
-.card img.photo {
-  width: 100%;                    /* don’t stretch beyond container */
-  height: 180px;                  /* fixed visible height */
-  object-fit: cover;              /* crop top/bottom neatly */
-  border-radius: 10px;
-  display: block;
-}
-
-/* Keep text tidy and aligned */
-.card h5,
-.card h4,
-.card p {
-  margin-bottom: 0.4rem;
-  color: #ff8c00;                 /* match your orange accent */
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-</style>
 </head>
 <body>
 <div class="container">
@@ -52,24 +31,43 @@ $rows = $pdo->query('SELECT p.*, (SELECT AVG(score) FROM votes v WHERE v.partici
     <div class="alert alert-info">Az eredmények láthatóak, de csak a Host változtathat fázisokat</div>
   <?php endif; ?>
   <div class="row gy-3">
-    <?php $i=0; foreach ($rows as $r): $i++; ?>
-      <div class="col-12 col-md-4">
-        <div class="card p-3 text-center">
-          <?php if ($r['photo']): ?><img src="<?php echo h($r['photo']); ?>" class="photo img-thumbnail mb-2"><?php endif; ?>
+  <?php $i=0; foreach ($rows as $r): $i++; ?>
+    <?php
+      // assign rank colors
+      $rankClass = '';
+      if ($i === 1) $rankClass = 'gold';
+      elseif ($i === 2) $rankClass = 'silver';
+      elseif ($i === 3) $rankClass = 'bronze';
+    ?>
+    <div class="col-12">
+      <div class="card result-card <?php echo $rankClass; ?> p-3 text-center">
+        <?php if ($r['photo']): ?>
+          <img src="<?php echo h($r['photo']); ?>" class="photo" alt="photo">
+        <?php endif; ?>
+        <div class="result-card-content">
           <h4><?php echo h($r['name']); ?></h4>
           <p><?php echo h($r['costume']); ?></p>
-          <p style="font-size:1.2rem"><strong>Átlag: <?php echo $r['avg_score'] ? number_format($r['avg_score'],2) : '—'; ?></strong> (<?php echo $r['votes_count']; ?> szavazat)</p>
-          <?php if ($i<=3): ?><div class="badge bg-success">Top #<?php echo $i; ?></div><?php endif; ?>
+          <p style="font-size:1.2rem">
+            <strong>Összpont: <?php echo $r['total_score'] ? number_format($r['total_score'],0) : '—'; ?></strong><br>
+            Átlag: <?php echo $r['avg_score'] ? number_format($r['avg_score'],2) : '—'; ?> 
+            (<?php echo $r['votes_count']; ?> szavazat)
+          </p>
+          <?php if ($i<=3): ?><div class="badge rank-badge">Top #<?php echo $i; ?></div><?php endif; ?>
         </div>
       </div>
-    <?php endforeach; ?>
-  </div>
+    </div>
+  <?php endforeach; ?>
+
+</div>
+
   <hr>
   <!-- <p><?php if ($is_admin): ?><a href="start_vote.php">Host controls</a></p>
   <p><a href="logout.php">Logout</a><?php else: ?><a href="login.php">Host login</a><?php endif; ?></p>
   <p><a href="index.php">Back to register</a></p>
   <p><a href="vote.php">Vote</a></p> -->
-<img src="assets/images/pumpkin.png" class="pumpkin" alt="pumpkin">
+<a href="index.php">
+  <img src="assets/images/pumpkin.png" class="pumpkin" alt="pumpkin">
+</a>
 </div>
 
 <script>

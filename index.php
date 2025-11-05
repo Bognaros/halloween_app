@@ -50,34 +50,40 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="alert alert-success">Sikeres regisztráció</div>
   <?php endif; ?>
 
-  <?php if ($phase === 'registration'): ?>
-  <form method="post" enctype="multipart/form-data" class="row g-3">
-    <div class="col-md-6">
-      <label class="form-label">Versenyző neve</label>
-      <input name="name" class="form-control" required maxlength="45">
+<?php if ($phase === 'registration'): ?>
+<form method="post" enctype="multipart/form-data" class="d-flex flex-column gap-3">
+    <div>
+        <label class="form-label">Versenyző neve</label>
+        <input name="name" class="form-control" required maxlength="45">
     </div>
-    <div class="col-md-6">
-      <label class="form-label">Jelmez neve</label>
-      <input name="costume" class="form-control" required maxlength="45">
+
+    <div>
+        <label class="form-label">Jelmez neve</label>
+        <input name="costume" class="form-control" required maxlength="45">
     </div>
-    <div class="col-12">
-      <label class="form-label">Fénykép (opcionális) — jpg/png/webp, kliens oldalon formázva, ha túl nagy</label>
-      <input type="file" name="photo" accept="image/*" class="form-control">
+
+    <div>
+        <label class="form-label">Fénykép (opcionális) — jpg/png/webp, kliens oldalon formázva, ha túl nagy</label>
+        <input type="file" name="photo" accept="image/*" class="form-control">
     </div>
-    <div class="col-12">
-      <button class="btn btn-primary">Regisztrál</button>
+
+    <div>
+        <button class="btn btn-primary btn-lg">Regisztrál</button>
     </div>
-  </form>
-  <?php else: ?>
-    <div class="alert alert-info">A regisztráció le van zárva. Kérd meg a host-ot, ha szükséges.</div>
-  <?php endif; ?>
+</form>
+<?php else: ?>
+<div class="alert alert-info">A regisztráció le van zárva. Kérd meg a host-ot, ha szükséges.</div>
+<?php endif; ?>
+
 
   <hr>
   <!-- <p>Already registered? <a href="vote.php">Go to voting</a></p> -->
   <p>Host vezérlés: <a href="login.php">Host belépés</a></p>
   <!--<p>Show results: <a href="results.php">Results</a></p> -->
   <p>Csatlakozás QR kóddal: <a href="qrcode.php">QR Kód</a></p>
+  <a href="index.php">
   <img src="assets/images/pumpkin.png" class="pumpkin" alt="pumpkin">
+</a>
 </div>
 
 <script>
@@ -89,33 +95,33 @@ document.querySelector('form')?.addEventListener('submit', async function(e){
   const reader = new FileReader();
   const canvas = document.createElement('canvas');
   const ctx = canvas.getContext('2d');
+
   e.preventDefault();
-  reader.onload = async function(ev){
+  reader.onload = function(ev){
     img.onload = function(){
-      const maxDim = 800;
-      let w = img.width;
-      let h = img.height;
-      if (w > h && w > maxDim) { h = h * (maxDim / w); w = maxDim; }
-      else if (h > w && h > maxDim) { w = w * (maxDim / h); h = maxDim; }
-      const targetWidth = 600;
-      const scale = targetWidth / w;
-      const scaledHeight = h * scale;
+      const targetWidth = 600;  // width of final image
+      const targetHeight = 600; // height of final image
 
-      // Draw the resized image to an offscreen canvas
+      // Calculate scale to fit the image into target width
+      const scale = targetWidth / img.width;
+      const scaledHeight = img.height * scale;
+
+      // Draw scaled image on canvas
       canvas.width = targetWidth;
-      canvas.height = scaledHeight;
-      ctx.drawImage(img, 0, 0, targetWidth, scaledHeight);
+      canvas.height = targetHeight;
 
-      // Now crop vertically to a fixed aspect ratio (square crop here)
-      const cropSize = 600; // height to crop to (square)
-      const yOffset = Math.max(0, (scaledHeight - cropSize) / 2); // center crop
+      // Compute vertical offset to center crop
+      const yOffset = (scaledHeight - targetHeight) / 2;
 
-      // Draw cropped result to a second canvas
-      const cropped = document.createElement('canvas');
-      cropped.width = targetWidth;
-      cropped.height = cropSize;
-      cropped.getContext('2d').drawImage(canvas, 0, yOffset, targetWidth, cropSize, 0, 0, targetWidth, cropSize);
-      cropped.toBlob(function(blob){
+      ctx.drawImage(
+        img,            // source image
+        0, yOffset / scale,   // source x, y
+        img.width, img.height - (yOffset * 2 / scale),  // source width, height
+        0, 0,           // destination x, y
+        targetWidth, targetHeight // destination width, height
+      );
+
+      canvas.toBlob(function(blob){
         const newFile = new File([blob], 'compressed.jpg', {type:'image/jpeg'});
         const dt = new DataTransfer();
         dt.items.add(newFile);
@@ -128,6 +134,7 @@ document.querySelector('form')?.addEventListener('submit', async function(e){
   reader.readAsDataURL(file);
 });
 </script>
+
 
 <script>
 (function() {
